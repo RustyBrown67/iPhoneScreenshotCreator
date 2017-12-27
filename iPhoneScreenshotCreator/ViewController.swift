@@ -22,9 +22,13 @@ class ViewController: NSViewController, NSTextViewDelegate {
     @IBOutlet weak var dropShadowStrength: NSSegmentedControl!
     @IBOutlet weak var dropShadowTarget: NSSegmentedControl!
     
+    // Variables
+    var screenshotImage: NSImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let recognizer = NSClickGestureRecognizer(target: self, action: #selector(importScreenshot))
+        imageView.addGestureRecognizer(recognizer)
         loadFonts()
         loadBackgroundImages()
         
@@ -87,6 +91,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
             self.drawBackgroundImage(rect: rect)
             self.drawColorOverlay(rect: rect)
             let captionOffset = self.drawCaption(context: ctx, rect: rect)
+            self.drawDevice(context: ctx, rect: rect, captionOffset: captionOffset)
+            self.drawScreenshot(context: ctx, rect: rect, captionOffset: captionOffset)
             return true
         }
         imageView.image = image
@@ -182,6 +188,54 @@ class ViewController: NSViewController, NSTextViewDelegate {
     
     func textDidChange(_ notification: Notification) {
         generatePreview()
+    }
+    
+    func drawDevice(context: CGContext, rect: CGRect, captionOffset: CGFloat) {
+        guard let image = NSImage(named: NSImage.Name(rawValue: "iPhone")) else { return }
+        
+        let offsetX = (rect.size.width - image.size.width) / 2
+        var offsetY = (rect.size.height - image.size.height) / 2
+        offsetY -= captionOffset
+        
+        if dropShadowStrength.selectedSegment != 0 {
+            if dropShadowTarget.selectedSegment == 1 || dropShadowTarget.selectedSegment == 2 {
+                setShadow()
+            }
+        }
+        
+        image.draw(at: CGPoint(x: offsetX, y: offsetY), from: .zero, operation: .sourceOver, fraction: 1)
+        
+        if dropShadowStrength.selectedSegment == 2 {
+            if dropShadowTarget.selectedSegment == 1 || dropShadowTarget.selectedSegment == 2 {
+                //create a stronger drop shadow by drawing again
+                image.draw(at: CGPoint(x: offsetX, y: offsetY), from: .zero, operation: .sourceOver, fraction: 1)
+            }
+        }
+        
+        //clear the shadow so it doesn't affect other stuff
+        let noShadow = NSShadow()
+        noShadow.set()
+    }
+    
+    @objc func importScreenshot() {
+        let panel = NSOpenPanel()
+        panel.allowedFileTypes = ["jpg", "png"]
+        
+        panel.begin { [unowned self ] result in
+            if result == NSApplication.ModalResponse.OK {
+                guard let imageURL = panel.url else { return }
+                self.screenshotImage = NSImage(contentsOf: imageURL)
+                self.generatePreview()
+            }
+        }
+    }
+    
+    func drawScreenshot(context: CGContext, rect: CGRect, captionOffset: CGFloat) {
+        guard let screenshot = screenshotImage else { return }
+        screenshot.size = CGSize(width: 891, height: 1584)
+        
+        let offsetY = 314 - captionOffset
+        screenshot.draw(at: CGPoint(x: 176, y: offsetY), from: .zero, operation: .sourceOver, fraction: 1)
     }
 
     // Actions
