@@ -847,12 +847,12 @@
                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aca-FV-1a0">
                                         <rect key="frame" x="0.0" y="227" width="230" height="26"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <popUpButtonCell key="cell" type="push" title="No background image" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="OWj-6Q-CvE" id="aut-ZU-bV7">
+                                        <popUpButtonCell key="cell" type="push" title="No background image" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="999" imageScaling="proportionallyDown" inset="2" selectedItem="OWj-6Q-CvE" id="aut-ZU-bV7">
                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="menu"/>
                                             <menu key="menu" id="LKW-ak-qHf">
                                                 <items>
-                                                    <menuItem title="No background image" state="on" id="OWj-6Q-CvE" userLabel="No background image"/>
+                                                    <menuItem title="No background image" state="on" tag="999" id="OWj-6Q-CvE" userLabel="No background image"/>
                                                     <menuItem isSeparatorItem="YES" id="XOs-wa-1QN"/>
                                                 </items>
                                             </menu>

@@ -14,7 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        // To display an opacity for the selected colour
+        NSColorPanel.shared.showsAlpha = true
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
